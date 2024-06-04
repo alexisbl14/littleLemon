@@ -20,15 +20,24 @@ function App() {
 
   const getIsFormValid = () => {
     // Implement this function
-    return true;
+    return ((firstName.length > 0)
+            && validateEmail(email)
+            && (password.value.length >= 8)
+            && (role == "individual" || role == "business"));
   };
 
   const clearForm = () => {
     // Implement this function
+    setFirstName("");
+    setLastName("");
+    setEmail("");
+    setPassword({value: "", isTouched: false});
+    setRole("role");
   };
 
-  const handleSubmit = () => {
+  const handleSubmit = (e) => {
     alert("Account created!");
+    e.preventDefault();
     clearForm();
   };
 
@@ -41,29 +50,30 @@ function App() {
             <label>
               First name <sup>*</sup>
             </label>
-            <input placeholder="First name" />
+            <input placeholder="First name" value={firstName} onChange={e => setFirstName(e.target.value)}/>
           </div>
           <div className="Field">
             <label>Last name</label>
-            <input placeholder="Last name" />
+            <input placeholder="Last name" value={lastName} onChange={e => setLastName(e.target.value)}/>
           </div>
           <div className="Field">
             <label>
               Email address <sup>*</sup>
             </label>
-            <input placeholder="Email address" />
+            <input placeholder="Email address" value={email} onChange={e => setEmail(e.target.value)}/>
           </div>
           <div className="Field">
             <label>
               Password <sup>*</sup>
             </label>
-            <input placeholder="Password" />
+            <input type="password" placeholder="Password" value={password.value} onChange={e => setPassword({value: e.target.value, isTouched: true})}/>
+            {password.isTouched && (password.value.length < 8) ? <PasswordErrorMessage /> : <div></div>}
           </div>
           <div className="Field">
             <label>
               Role <sup>*</sup>
             </label>
-            <select>
+            <select value={role} onChange={e => setRole(e.target.value)}>
               <option value="role">Role</option>
               <option value="individual">Individual</option>
               <option value="business">Business</option>
